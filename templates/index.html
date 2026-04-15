@@ -1,0 +1,287 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Defect Detection</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 110px 20px 50px;
+        }
+
+        nav {
+            background: #c62828;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-logo { color: white; font-size: 18px; font-weight: bold; text-decoration: none; }
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 500px;
+            padding: 50px 40px 40px;
+            background: #c62828;
+            border-radius: 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .sepal-container {
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .sepal { width: 170px; height: 170px; }
+
+        .card-title { font-size: 24px; font-weight: bold; margin-bottom: 6px; }
+        .card-subtitle { font-size: 14px; opacity: 0.85; margin-bottom: 28px; }
+
+        .upload-area {
+            background: rgba(255,255,255,0.15);
+            border: 2px dashed rgba(255,255,255,0.6);
+            border-radius: 20px;
+            padding: 30px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .upload-area:hover { background: rgba(255,255,255,0.25); }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .upload-icon { font-size: 44px; margin-bottom: 10px; }
+        .upload-label { font-size: 15px; opacity: 0.9; font-weight: bold; }
+        .upload-hint { font-size: 12px; opacity: 0.65; margin-top: 5px; }
+
+        .format-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-size: 11px;
+            opacity: 0.85;
+        }
+
+        #preview-container { display: none; margin-bottom: 16px; }
+
+        #preview-img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: contain;
+            border-radius: 15px;
+            border: 3px solid rgba(255,255,255,0.4);
+        }
+
+        .preview-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .change-link {
+            color: white;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+            opacity: 0.75;
+            background: none;
+            border: none;
+        }
+
+        .scan-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 17px;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            color: #c62828;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 4px;
+        }
+
+        .scan-btn:hover:not(:disabled) { transform: scale(1.03); }
+        .scan-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        .loading-text {
+            display: none;
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 12px;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .info-note {
+            margin-top: 20px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 14px;
+            padding: 12px 16px;
+            font-size: 13px;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">🍅 Tomato Detection</a>
+    <ul class="nav-links">
+        <li><a href="/" class="active">Detect</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+</nav>
+
+<div class="card">
+    <div class="sepal-container">
+        <svg class="sepal" viewBox="0 0 200 200">
+            <rect x="90" y="0" width="20" height="90" fill="#2e7d32"/>
+            <polygon points="100,60 40,120 90,110" fill="#2e7d32"/>
+            <polygon points="100,60 160,120 110,110" fill="#2e7d32"/>
+            <polygon points="100,60 100,140 120,110" fill="#2e7d32"/>
+            <polygon points="100,60 100,140 80,110" fill="#2e7d32"/>
+            <polygon points="100,60 60,90 90,90" fill="#2e7d32"/>
+            <polygon points="100,60 140,90 110,90" fill="#2e7d32"/>
+        </svg>
+    </div>
+
+    <div class="card-title">Tomato Detection</div>
+    <div class="card-subtitle">Upload a tomato image to classify its condition</div>
+
+    <form action="/detect" method="POST" enctype="multipart/form-data" id="upload-form">
+        <div class="upload-area" id="upload-area">
+            <input type="file" name="image" id="file-input" accept=".jpg,.jpeg,.png" required>
+            <div class="upload-icon">🍅</div>
+            <div class="upload-label">Click or drag an image here</div>
+            <div class="upload-hint">Make sure the tomato is clearly visible</div>
+            <div class="format-badges">
+                <span class="badge">JPG</span>
+                <span class="badge">JPEG</span>
+                <span class="badge">PNG</span>
+            </div>
+        </div>
+
+        <div id="preview-container">
+            <img id="preview-img" src="" alt="Preview">
+            <div class="preview-meta">
+                <span id="file-name"></span>
+                <button type="button" class="change-link" id="change-btn">Change image</button>
+            </div>
+        </div>
+
+        <button class="scan-btn" type="submit" id="submit-btn" disabled>
+            Detect Tomato
+        </button>
+
+        <div class="loading-text" id="loading-text">
+            Analyzing image, please wait...
+        </div>
+    </form>
+
+    <div class="info-note">
+        For best results, use a well-lit photo with the tomato centered in the frame.
+    </div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('file-input');
+    const previewContainer = document.getElementById('preview-container');
+    const previewImg = document.getElementById('preview-img');
+    const fileName = document.getElementById('file-name');
+    const submitBtn = document.getElementById('submit-btn');
+    const uploadArea = document.getElementById('upload-area');
+    const loadingText = document.getElementById('loading-text');
+    const form = document.getElementById('upload-form');
+    const changeBtn = document.getElementById('change-btn');
+
+    fileInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                previewContainer.style.display = 'block';
+                uploadArea.style.display = 'none';
+                fileName.textContent = file.name;
+                submitBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    changeBtn.addEventListener('click', function () {
+        fileInput.value = '';
+        previewContainer.style.display = 'none';
+        uploadArea.style.display = 'block';
+        submitBtn.disabled = true;
+    });
+
+    form.addEventListener('submit', function () {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Detecting...';
+        loadingText.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>

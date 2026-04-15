@@ -1,0 +1,243 @@
+<!-- about.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About – Tomato Fault Detection</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 120px 20px 60px;
+        }
+
+        nav {
+            background: #c62828;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-logo { color: white; font-size: 18px; font-weight: bold; text-decoration: none; }
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: #c62828;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            font-size: 15px;
+            color: #666;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .toggle-btn {
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .toggle-btn:hover { transform: scale(1.03); }
+
+        .toggle-btn.outline {
+            background: white;
+            color: #c62828;
+            border: 2px solid #c62828;
+        }
+
+        .panel {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            animation: fadeIn 0.25s ease;
+        }
+
+        .panel.open { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel h2 {
+            font-size: 18px;
+            color: #c62828;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .panel p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .panel p:last-child { margin-bottom: 0; }
+
+        .section-gap { margin-top: 20px; }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .team-card {
+            background: #fff5f5;
+            border: 2px solid #f5c6c6;
+            border-radius: 16px;
+            padding: 20px 12px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #c62828;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 auto 10px;
+        }
+
+        .team-name { font-size: 14px; font-weight: bold; color: #333; }
+        .team-role { font-size: 12px; color: #888; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">🍅 Tomato Detection</a>
+    <ul class="nav-links">
+        <li><a href="/">Detect</a></li>
+        <li><a href="/about" class="active">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-header">
+    <h1>About This Project</h1>
+    <p>Learn about our vision, mission, and the people behind the research.</p>
+</div>
+
+<div class="btn-row">
+    <button class="toggle-btn outline" onclick="togglePanel('vm-panel')">
+        Vision & Mission
+    </button>
+    <button class="toggle-btn outline" onclick="togglePanel('team-panel')">
+        Team
+    </button>
+</div>
+
+<div id="vm-panel" class="panel open">
+    <h2>Our Vision</h2>
+    <p>
+        To make it easy for farmers and vendors to check tomato quality using smart tools,
+        so they can avoid waste and sell better products.
+    </p>
+
+    <div class="section-gap">
+        <h2>Our Mission</h2>
+        <p>
+            Our goal is to create a simple and reliable system that can detect tomato defects
+            using AI, so anyone can use modern technology even without technical knowledge.
+        </p>
+    </div>
+</div>
+
+<div id="team-panel" class="panel">
+    <h2>Research Team</h2>
+    <div class="team-grid">
+
+        <!-- Edit names, initials, and roles here -->
+        <div class="team-card">
+            <div class="avatar">PE</div>
+            <div class="team-name">Prince Wally G. Esteban</div>
+            <div class="team-role">Researcher</div>
+        </div>
+        <div class="team-card">
+            <div class="avatar">DF</div>
+            <div class="team-name">Don Eleazar T. Fernandez</div>
+            <div class="team-role">Researcher</div>
+        </div>
+        <div class="team-card">
+            <div class="avatar">CS</div>
+            <div class="team-name">Christan Ray R. Sanchez</div>
+            <div class="team-role">Researcher</div>
+        </div>
+        <div class="team-card">
+            <div class="avatar">JS</div>
+            <div class="team-name">Justin Bjorn L. Sanchez</div>
+            <div class="team-role">Researcher</div>
+        </div>
+        <div class="team-card">
+            <div class="avatar">KV</div>
+            <div class="team-name">Kenn Jie L. Valleser</div>
+            <div class="team-role">Researcher</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function togglePanel(id) {
+        const panel = document.getElementById(id);
+        panel.classList.toggle('open');
+    }
+</script>
+
+</body>
+</html>
